@@ -1,10 +1,18 @@
-import express from "express";
-import mysql from "mysql";
-import cors from "cors";
-import axios from "axios";
-import jwt from "jsonwebtoken";
-import session from "express-session";
-import cookieParser from "cookie-parser";
+// import express from "express";
+// import mysql from "mysql";
+// import cors from "cors";
+// import axios from "axios";
+// import jwt from "jsonwebtoken";
+// import session from "express-session";
+// import cookieParser from "cookie-parser";
+
+const express = require("express");
+const mysql = require("mysql");
+const cors = require("cors");
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -14,6 +22,7 @@ const db = mysql.createConnection({
 });
 
 const app = express();
+const PORT = 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -59,9 +68,6 @@ app.post("/login", (req, res) => {
       }
 
       if (result.length > 0) {
-        req.session.user = "user";
-        req.session.save();
-
         return res.json({
           error: false,
           user: result,
@@ -72,11 +78,6 @@ app.post("/login", (req, res) => {
       }
     }
   );
-});
-
-app.get("/api/getSession", (req, res) => {
-  const sessionUser = req.session.user;
-  res.json({ sessionUser });
 });
 
 // Get Posts
@@ -112,8 +113,8 @@ app.get("/users", async (req, res) => {
   } catch (error) {}
 });
 
-app.listen(8081, () => {
-  console.log("Listening to port 8081");
+app.listen(PORT, () => {
+  console.log(`Listening to port ${PORT}`);
 });
 
 // Export the Express API
